@@ -1,31 +1,31 @@
 #include <format>
 #include <sys/stat.h>
 
-#include "logging.h"
+#include "logger.h"
 #include "util.h"
 
 using namespace std;
 using namespace util;
 
-Logger::Logger(): dir("log/kilo.log")
+logger::logger(): dir("log/kilo.log")
 {
     open_file();
 };
 
-Logger::Logger(string writeDir_): dir(writeDir_)
+logger::logger(string writeDir_): dir(writeDir_)
 {
     open_file();
 };
 
-Logger::~Logger() {
+logger::~logger() {
     ofs.close();
 }
 
-string Logger::getDir() {
+string logger::getDir() {
     return dir;
 }
 
-void Logger::open_file() {
+void logger::open_file() {
     mkdir("./log", 0777);
     ofs.open(dir, std::ios::app);
     if (!ofs.is_open()) {
@@ -34,22 +34,22 @@ void Logger::open_file() {
     }
 }
 
-void Logger::debug(string output) {
+void logger::debug(string output) {
     ofs << format("[{:<5}]{} : {}\n", MODE_DEBUG, get_time(), output);
     ofs.flush();
 }
 
-void Logger::log(string output) {
+void logger::log(string output) {
     ofs << format("[{:<5}]{} : {}\n", MODE_INFO, get_time(), output);
     ofs.flush();
 }
 
-void Logger::log(string output, string level) {
+void logger::log(string output, string level) {
     ofs << format("[{:<5}]{} : {}\n", level, get_time(), output);
     ofs.flush();
 }
 
-void Logger::error(string output) {
+void logger::error(string output) {
     ofs << format("[{:<5}]{} : {}\n", MODE_ERROR, get_time(), output);
     ofs.flush();
 }

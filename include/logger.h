@@ -11,7 +11,7 @@ using namespace std;
 #define MODE_WARN  "WARN"
 #define MODE_ERROR "ERROR"
 
-class Logger {
+class logger {
 
     private:
         /** log file location */
@@ -21,9 +21,9 @@ class Logger {
         /** format */
         string fmt;
     public:
-        Logger();
-        Logger(string writeDir_);
-        ~Logger();
+        logger();
+        logger(string writeDir_);
+        ~logger();
         void open_file();
         string getDir();
         void debug(string output);
