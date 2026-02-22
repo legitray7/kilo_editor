@@ -24,9 +24,19 @@ terminal::~terminal() {
 
 termios terminal::setRawFlags(struct termios tty) {
     LOGGER.debug("setRawFlags() start");
-    tty.c_iflag &= ~(ICRNL | IXON);
+    tty.c_iflag &= ~(
+        IGNBRK | BRKINT |       // BREAK
+        INPCK | ISTRIP |        // PARITY
+        INLCR | IGNCR | ICRNL | // CONVERT INPUT
+        IXON                    // FLOW CONTROL
+    );
     tty.c_oflag &= ~(OPOST);
-    tty.c_lflag &= ~(ECHO | ICANON | IEXTEN);
+    tty.c_lflag &= ~(
+        ECHO | ECHOE | ECHOK | ECHOCTL |
+        ICANON | IEXTEN | ISIG
+    );
+    tty.c_cc[VMIN] = 1;
+    tty.c_cc[VTIME] = 0;
 
     tty.c_cc[VSUSP] = _POSIX_VDISABLE; // Ctrl-Z
 
