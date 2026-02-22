@@ -5,10 +5,10 @@
 #include "logger.h"
 using namespace std;
 
+
 int main()
 {
-    logger log;
-    log.log("main() start");
+    LOGGER.debug("main() start");
     terminal term;
 
     // turn terminal into raw mode

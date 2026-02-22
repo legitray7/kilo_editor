@@ -1,35 +1,36 @@
 #include "unistd.h"
 #include "terminal.h"
-
-logger log;
+#include "util.h"
 
 terminal::terminal() {
-    log.log("terminal constructor start");
+    LOGGER.debug("terminal constructor start");
 
-    struct termios term;
-    tcgetattr(STDIN_FILENO, &term);
-    orig_term = term;
-    term = setRawFlags(term);
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
+    struct termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    orig_tty = tty;
+    tty = setRawFlags(tty);
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tty);
 
-    log.log("terminal constructor end");
+    LOGGER.debug("terminal constructor end");
 }
 
 terminal::~terminal() {
-    log.log("terminal destructor start");
+    LOGGER.debug("terminal destructor start");
     
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_term);
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_tty);
 
-    log.log("terminal destructor end");
+    LOGGER.debug("terminal destructor end");
 }
 
-termios terminal::setRawFlags(struct termios term) {
-    log.log("setRawFlags() start");
-    term.c_lflag &= ~(ECHO | ICANON);
+termios terminal::setRawFlags(struct termios tty) {
+    LOGGER.debug("setRawFlags() start");
+    tty.c_iflag &= ~(ICRNL | IXON);
+    tty.c_oflag &= ~(OPOST);
+    tty.c_lflag &= ~(ECHO | ICANON | IEXTEN);
 
-    term.c_cc[VSUSP] = _POSIX_VDISABLE;
+    tty.c_cc[VSUSP] = _POSIX_VDISABLE; // Ctrl-Z
 
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
-    log.log("setRawFlags() end");
-    return term;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tty);
+    LOGGER.debug("setRawFlags() end");
+    return tty;
 }

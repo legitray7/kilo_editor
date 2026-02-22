@@ -5,7 +5,6 @@
 #include "util.h"
 
 using namespace std;
-using namespace util;
 
 logger::logger(): dir("log/kilo.log")
 {
@@ -21,7 +20,7 @@ logger::~logger() {
     ofs.close();
 }
 
-string logger::getDir() {
+string logger::get_dir() {
     return dir;
 }
 
@@ -35,21 +34,21 @@ void logger::open_file() {
 }
 
 void logger::debug(string output) {
-    ofs << format("[{:<5}]{} : {}\n", MODE_DEBUG, get_time(), output);
+    ofs << format("[{:<5}]{} : {}\n", MODE_DEBUG, util::get_time(), output);
     ofs.flush();
 }
 
-void logger::log(string output) {
-    ofs << format("[{:<5}]{} : {}\n", MODE_INFO, get_time(), output);
+void logger::write(string output) {
+    ofs << format("[{:<5}]{} : {}\n", MODE_INFO, util::get_time(), output);
     ofs.flush();
 }
 
-void logger::log(string output, string level) {
-    ofs << format("[{:<5}]{} : {}\n", level, get_time(), output);
+void logger::write(string output, string level) {
+    ofs << format("[{:<5}]{} : {}\n", level, util::get_time(), output);
     ofs.flush();
 }
 
 void logger::error(string output) {
-    ofs << format("[{:<5}]{} : {}\n", MODE_ERROR, get_time(), output);
+    ofs << format("[{:<5}]{} : {}\n", MODE_ERROR, util::get_time(), output);
     ofs.flush();
 }
