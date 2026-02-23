@@ -9,5 +9,8 @@ private:
 public:
     terminal();
     ~terminal();
-    termios setRawFlags(struct termios term);
+    int init_termios();
+    int init_screen();
+    int restore_screen();
+    termios set_flags(struct termios term);
 };
